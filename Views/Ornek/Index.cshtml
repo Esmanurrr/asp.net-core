@@ -1,26 +1,45 @@
-﻿
+﻿@using MyAspNetCoreApp.Web.Controllers
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Selamun Aleyküm :D</h1>
-@{
-    var name = ViewBag.name;
-    <p>@name</p>
+@model List<Product2>; 
+
+@foreach (var item in Model)
+	{
+		<p>@item.Id - @item.name </p> 
+	}
+
+
+<h1>Ornek Controller, Index sayfası</h1>
+
+<div>Günün tarihi : @DateTime.Now.ToShortDateString() </div
+>
+@{ 
+    var datetime = DateTime.Now.ToShortDateString();
+	var message = "merhaba";
+
+	@: bugünün tarihi : @datetime
+	<div>mesaj : @message</div>
+
 }
-<p>@name</p>
 
-<p>@ViewBag.name</p>
-
-<hr />
-<p>@ViewData["age"]</p>
-
-<h1>isimler</h1>
-
-@foreach (var item in ViewData["isimler"] as List<string>)
+@if (1==1)
 {
+	<p>doğru</p>
+}else if (DateTime.IsLeapYear(DateTime.Now.Year)){
+	<p>artık yıl</p>
+ }
+ else{
+	<p>yanlış</p>
+ }
 
-    <p>@item</p>
+@for (int i = 0; i < 10; i++)
+{
+	<p>@i</p>
 }
 
-<p> @ViewBag.person.Id </p> 
+@foreach (var item in Enumerable.Range(1,10).ToList())
+{
+	<p>@item</p>
+}

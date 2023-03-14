@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace MyAspNetCoreApp.Web.Controllers
 {
-    public class Product
+    public class Product2
     {
-        public int deger { get; set; }
-        public string isim { get; set; }
-        public int yas { get; set; }
+        public int Id { get; set; }
+        public string name { get; set; }
     }
 
 
@@ -19,19 +18,15 @@ namespace MyAspNetCoreApp.Web.Controllers
         public IActionResult Index()
         {
 
-            ViewBag.name = "ASP .Net Core";
-            ViewData["age"] = 30;
+            var productList = new List<Product2>
+            {
+                new(){Id= 1, name="kalem"},
+                new(){Id= 2, name="defter"},
+                new(){Id=3, name="silgi"}
+            };
 
-            ViewData["isimler"] = new List<string>() {"serkan", "esmanur" };
 
-            ViewBag.person = new {Id = 1, name = "süleyman", age = 25 };
-          
-
-            ViewBag.name = "esmanur";
-
-            TempData["surname"] = "mazlum";
-
-            return View();
+            return View(productList);
         }
 
         public IActionResult Index2()
