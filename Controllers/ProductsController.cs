@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using MyAspNetCoreApp.Web.Helpers;
 using MyAspNetCoreApp.Web.Models;
 using System;
@@ -17,36 +18,24 @@ namespace MyAspNetCoreApp.Web.Controllers
 
         private readonly ProductRepository _productRepository;
 
-        
 
-        public ProductsController(AppDbContext context,IHelper helper)
+
+        public ProductsController(AppDbContext context)
         {
             _productRepository = new ProductRepository();
 
             _context = context;
 
-            _helper = helper;   
 
-            //if (!_context.Products.Any())//içinde herhangi bir data yoksa bunları ekle
-            //{
-            //    _context.Products.Add(new Product() { Name = "Kalem", Price = 100, Stock = 100, Color="Red"});
-            //    _context.Products.Add(new Product() { Name = "Silgi", Price = 200, Stock = 200, Color = "Red" });
-            //    _context.Products.Add(new Product() { Name = "Defter", Price = 300, Stock = 300, Color = "Red"});//ef core bu dataları ramde tutuyor, bunu veritabanında da görebilmek için aşağıdaki kodu kullanırız.
-
-            //    _context.SaveChanges();
-            //}
-            
 
         }
 
-        public IActionResult Index([FromServices]IHelper helper2)
+        public IActionResult Index()
         {
-            var text = "Asp.Net";
-            var upperText = _helper.Upper(text);
 
-            var status = _helper.Equals(helper2);//helper ve helper2'nin aynı tür olup olmadığını kontrol ediyoruz
 
-            pvar products = _context.Products.ToList();
+
+            var products = _context.Products.ToList();
 
             return View(products);
         }
@@ -66,21 +55,28 @@ namespace MyAspNetCoreApp.Web.Controllers
         public IActionResult Add()
         {
 
+            ViewBag.Expire = new Dictionary<string, int>() {
+                { "1 ay", 1},
+                { "3 ay", 3},
+                { "6 ay", 6},
+                { "12 ay", 12}
+            };
+
+            ViewBag.ColorSelect = new SelectList( new List<ColorSelectList>()
+            {   
+                new() {Data="Blue", Value="Blue"},
+                new() {Data="Red", Value="Red"},
+                new() {Data="Green", Value="Green"},
+
+            },"Value","Data");
+
             return View();
         }
 
         [HttpPost]
         public IActionResult Add(Product newProduct)
         {
-            //1. yöntem
-
-            //var name = HttpContext.Request.Form["Name"].ToString();
-            //var price = decimal.Parse(HttpContext.Request.Form["Price"].ToString());
-            //var stock = int.Parse(HttpContext.Request.Form["Stock"].ToString());
-            //var color = HttpContext.Request.Form["Color"].ToString();
-
-            //2. yöntem
-            //Product myProduct = new Product() { Name=name, Price=price, Stock=stock, Color=color};
+            
             _context.Products.Add(newProduct);
             _context.SaveChanges();
 
@@ -93,15 +89,30 @@ namespace MyAspNetCoreApp.Web.Controllers
         [HttpGet]
         public IActionResult Update(int id)
         {
-            var product = _context.Products.Find(id);  
+            var product = _context.Products.Find(id);
+
+            ViewBag.ExpireValue = product.Expire;
+            ViewBag.Expire = new Dictionary<string, int>() {
+                { "1 ay", 1},
+                { "3 ay", 3},
+                { "6 ay", 6},
+                { "12 ay", 12}
+            };
+
+            ViewBag.ColorSelect = new SelectList(new List<ColorSelectList>()
+            {
+                new() {Data="Blue", Value="Blue"},
+                new() {Data="Red", Value="Red"},
+                new() {Data="Green", Value="Green"},
+
+            }, "Value", "Data", product.Color);
 
             return View(product);
         }
 
         [HttpPost]
-        public IActionResult Update(Product updateProduct, int productId)
+        public IActionResult Update(Product updateProduct)
         {
-            updateProduct.Id = productId;
 
             _context.Products.Update(updateProduct);
             _context.SaveChanges();

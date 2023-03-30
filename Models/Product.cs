@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.PeerToPeer.Collaboration;
 using System.Threading.Tasks;
 
 namespace MyAspNetCoreApp.Web.Models
@@ -11,9 +12,11 @@ namespace MyAspNetCoreApp.Web.Models
         public string? Name { get; set; }
         public decimal Price { get; set; }
         public int Stock { get; set; }
-
+        public DateTime? PublishDate { get; set; }
+        public string? Description { get; set; }
         public string Color { get; set; }
-
+        public bool IsPublish { get; set; }
+        public int Expire { get; set; }
 
 
     }
